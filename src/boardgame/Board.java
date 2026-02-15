@@ -45,7 +45,7 @@ public class Board {
 		piece.position = position;
 	}
 	
-	public Piece removePiece(Position position) {
+	public Piece removePiece(Position position) { // Retorna Piece pq precisa guardar a peça removida/reposicionada
 		if(!positionExists(position)) {
 			throw new BoardException("Position not on the board");
 		}
