@@ -1,6 +1,8 @@
 package chess;
 
 import boardgame.Board;
+import boardgame.Piece;
+import boardgame.Position;
 import chess.pieces.King;
 import chess.pieces.Rook;
 
@@ -13,7 +15,7 @@ public class ChessMatch {
 		initialSetup();
 	}
 	
-	public ChessPiece[][] getPieces(){
+	public ChessPiece[][] getPieces(){ // Converte a matriz de Piece em de ChessPiece
 		ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getColumns()];
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0;  j < board.getColumns(); j++) {
@@ -21,6 +23,27 @@ public class ChessMatch {
 			}
 		}
 		return mat;
+	}
+	
+	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) { 
+		Position source = sourcePosition.toPosition(); // presisa converter as posições do xadrez p/ o de matriz
+		Position target = targetPosition.toPosition();
+		validateSourcePosition(source);
+		Piece capturedPiece = makeMove(source, target);
+		return (ChessPiece) capturedPiece;
+	}
+	
+	private Piece makeMove(Position source, Position target) {
+		Piece p = board.removePiece(source); // guarda a peça que será movida do tabuleiro (tira da origem) 
+		Piece capturedPiece = board.removePiece(target); // guarda a peça que foi capturada e que estava na posição de destino
+		board.placePiece(p, target); // coloca a peça que foi tirada da origem 'p' e coloca na posição da peça que foi capturada 
+		return capturedPiece; 
+	}
+	
+	private void validateSourcePosition(Position position) {
+		if(!board.thereIsAPiece(position)) {
+			throw new ChessException("There is no piece on source position");
+		}
 	}
 	
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
