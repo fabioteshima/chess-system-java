@@ -53,8 +53,8 @@ public class Board {
 			return null;
 		}
 		Piece aux = piece(position);
-		aux.position = null;
-		pieces[position.getRow()][position.getColumn()] = null;
+		aux.position = null; // Anula a posição que a peça guardava em position.
+		pieces[position.getRow()][position.getColumn()] = null; // tira a peça da matriz piece.
 		return aux;
 	}
 	
