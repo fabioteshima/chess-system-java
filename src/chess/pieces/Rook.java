@@ -23,13 +23,13 @@ public class Rook extends ChessPiece {
 		Position p = new Position(0, 0);
 		
 		//above
-		p.setValues(position.getRow() - 1, position.getColumn()); // seta "p" auxiliar na casa/posição acima da peça 
+		p.setValues(position.getRow() - 1, position.getColumn());	//Seta "p" auxiliar na casa/posição acima da peça 
 		while(getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) { 
-			mat[p.getRow()][p.getColumn()] = true; // coloca true nas posições da matriz onde a casa existe e se está vago
-			p.setRow(p.getRow() - 1); // passa para a casa mais acima 
+			mat[p.getRow()][p.getColumn()] = true;	  //Coloca true nas posições da matriz onde a casa existe e se está vago
+			p.setRow(p.getRow() - 1);	 //Passa para a casa mais acima 
 		}
-		if(getBoard().positionExists(p) && isThereOpponentPiece(p)) { // verifica se a última casa tem peça adversária ou não
-			mat[p.getRow()][p.getColumn()] = true; // se tiver marca true nessa posição também (pode "comer" a peça adversária")		
+		if(getBoard().positionExists(p) && isThereOpponentPiece(p)) {	 //Verifica se a última casa tem peça adversária ou não
+			mat[p.getRow()][p.getColumn()] = true;	  //Se tiver marca true nessa posição também (pode "comer" a peça adversária")		
 		}
 		
 		//left

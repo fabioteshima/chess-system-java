@@ -1,7 +1,6 @@
 package chess;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +45,7 @@ public class ChessMatch {
 	}
 	
 	
-	public ChessPiece[][] getPieces(){ // Converte a matriz do tipo Piece em tipo ChessPiece
+	public ChessPiece[][] getPieces(){	 //Converte a matriz do tipo Piece em tipo ChessPiece
 		ChessPiece[][] mat = new ChessPiece[board.getRows()][board.getColumns()];
 		for (int i = 0; i < board.getRows(); i++) {
 			for (int j = 0;  j < board.getColumns(); j++) {
@@ -62,12 +61,12 @@ public class ChessMatch {
 		return board.piece(position).possibleMoves();
 	}
 	
-	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) { //Mover a peça de um lugar para outro
-		Position source = sourcePosition.toPosition(); // Presisa converter as posições do xadrez p/ o de matriz
+	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {	//Mover a peça de um lugar para outro
+		Position source = sourcePosition.toPosition();    //Presisa converter as posições do xadrez p/ o de matriz
 		Position target = targetPosition.toPosition();
 		validateSourcePosition(source);
 		validateTargetPosition(source, target);
-		Piece capturedPiece = makeMove(source, target); //Move a peça e guarda a peça capturada para guardar na lista ou eventual desfazimento de movimento
+		Piece capturedPiece = makeMove(source, target);	  //Move a peça e guarda a peça capturada para guardar na lista ou eventual desfazimento de movimento
 
 //		Testa check após movimentar a peça (jogador não pode se colocar em check, então deve se desfazer o movimento anterior) 
 		if (testCheck(currentPlayer)) {
@@ -83,31 +82,33 @@ public class ChessMatch {
 			checkMate = true;
 		}
 		else {
-			nextTurn(); // muda turno se não estiver em checkmate
+			nextTurn();    //Muda turno se não estiver em checkmate
 		}
 		return (ChessPiece) capturedPiece;
 	}
 	
 	private Piece makeMove(Position source, Position target) {
-		Piece p = board.removePiece(source); //Guarda a peça que será movida do tabuleiro (tira da origem) 
-		Piece capturedPiece = board.removePiece(target); //Guarda a peça que foi capturada e que estava na posição de destino
-		board.placePiece(p, target); //Coloca a peça que foi tirada da origem 'p' e coloca na posição da peça que foi capturada 
+		ChessPiece p = (ChessPiece)board.removePiece(source);	//Guarda a peça que será movida do tabuleiro (tira da origem) 
+		p.increaseMoveCount();
+		Piece capturedPiece = board.removePiece(target);	//Guarda a peça que foi capturada e que estava na posição de destino
+		board.placePiece(p, target);	//Coloca a peça que foi tirada da origem 'p' e coloca na posição da peça que foi capturada 
 		
 		if (capturedPiece != null) {
-			piecesOnTheBoard.remove(capturedPiece);
-			capturedPieces.add(capturedPiece);
+			piecesOnTheBoard.remove(capturedPiece);	   //Tira a peça da lista do tabuleiro
+			capturedPieces.add(capturedPiece);	  //Coloca na lista de peças capturadas
 		}
 		return capturedPiece; 
 	}
 	
-	private void undoMove(Position source, Position target, Piece capturedPiece) {
-		Piece p = board.removePiece(target);
+	private void undoMove(Position source, Position target, Piece capturedPiece) {	 //Desfaz o movimento
+		ChessPiece p = (ChessPiece)board.removePiece(target);
+		p.decreaseMoveCount();
 		board.placePiece(p, source);
 		
 		if (capturedPiece != null) {
-			board.placePiece(capturedPiece, target);
-			capturedPieces.remove(capturedPiece);
-			piecesOnTheBoard.add(capturedPiece);
+			board.placePiece(capturedPiece, target);	//Coloca de volta a peça capturada na sua posição
+			capturedPieces.remove(capturedPiece);	//Remove da lista de peças capturadas
+			piecesOnTheBoard.add(capturedPiece);   //E devolve para lista de peças no tabuleiro 
 		}
 	}
 	
@@ -138,7 +139,7 @@ public class ChessMatch {
 		return (color == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
 	
-	private ChessPiece king(Color color) { //Pega apenas a peça do Rei da referida cor passado no parâmetro
+	private ChessPiece king(Color color) {	  //Pega apenas a peça do Rei da referida cor passado no parâmetro
 		List<Piece> list = piecesOnTheBoard.stream().filter(x -> ((ChessPiece)x).getColor() == color).collect(Collectors.toList());
 		for (Piece p : list){
 			if (p instanceof King) {
@@ -180,7 +181,7 @@ public class ChessMatch {
 						boolean testCheck = testCheck(color);	//Testa de o Rei ainda está em check
 						undoMove(source, target, capturedPiece);	//Desfaz o movimento
 						if(!testCheck) {	//Se o teste der falso o movimento tirou o Rei do check
-							return false;	//Não está em check
+							return false;	 //Não está em check
 						}
 					}
 				}
@@ -188,7 +189,7 @@ public class ChessMatch {
 		}
 		return true;	//Está em checkmate
 	}
-	
+	 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
 		piecesOnTheBoard.add(piece);

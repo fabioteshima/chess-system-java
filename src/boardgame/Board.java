@@ -45,7 +45,7 @@ public class Board {
 		piece.position = position;
 	}
 	
-	public Piece removePiece(Position position) { // Retorna Piece pq precisa guardar a peça removida/reposicionada
+	public Piece removePiece(Position position) {	//Retorna Piece pq precisa guardar a peça removida/reposicionada
 		if(!positionExists(position)) {
 			throw new BoardException("Position not on the board");
 		}
@@ -53,8 +53,8 @@ public class Board {
 			return null;
 		}
 		Piece aux = piece(position);
-		aux.position = null; // Anula a posição que a peça guardava em position.
-		pieces[position.getRow()][position.getColumn()] = null; // tira a peça da matriz piece.
+		aux.position = null;	//Anula a posição que a peça guardava em position.
+		pieces[position.getRow()][position.getColumn()] = null;    //Tira a peça da matriz piece.
 		return aux;
 	}
 	
