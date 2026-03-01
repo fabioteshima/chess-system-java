@@ -22,6 +22,8 @@ public class Bishop extends ChessPiece {
 		
 		Position p = new Position(0, 0);
 		
+//		Bispo move para as diagonais
+		
 		//nw
 		p.setValues(position.getRow() - 1, position.getColumn() - 1);	//Seta p na diagonal noroeste 
 		while(getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) { 
